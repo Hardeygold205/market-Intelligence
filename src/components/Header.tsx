@@ -1,6 +1,12 @@
-import React from 'react';
-import { Logo } from './Logo';
-import { RefreshCw, HelpCircle, Check, Database } from 'lucide-react';
+import React from "react";
+import { Logo } from "./Logo";
+import {
+  RefreshCw,
+  HelpCircle,
+  Check,
+  Clock,
+  AlertTriangle,
+} from "lucide-react";
 
 interface HeaderProps {
   lastUpdated: Date;
@@ -21,85 +27,99 @@ export const Header: React.FC<HeaderProps> = ({
   onRefresh,
   onOpenTour,
   errorNotice,
-  newRecordsNotice
+  newRecordsNotice,
 }) => {
   const formatTimeRemaining = (totalSec: number) => {
     const mins = Math.floor(Math.max(0, totalSec) / 60);
     const secs = Math.max(0, totalSec) % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const formattedDate = !isNaN(lastUpdated.getTime())
-    ? lastUpdated.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
+    ? lastUpdated.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
       })
-    : '';
+    : "";
 
   const formattedTime = !isNaN(lastUpdated.getTime())
     ? lastUpdated.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
+        hour: "2-digit",
+        minute: "2-digit",
       })
-    : '';
+    : "";
 
   return (
-    <header className="bg-[#206542] text-white shadow-md sticky top-0 z-40 border-b border-[#15432C]">
-      {/* Top Banner Notice if refresh failed */}
+    <header className="bg-[#206542] text-white shadow-lg sticky top-0 z-40 border-b border-[#15432C] transition-colors">
+      {/* Top Banner Notice: Error / Retrying */}
       {errorNotice && (
-        <div className="bg-[#F3F6D9] text-black px-4 py-1.5 text-xs font-medium flex items-center justify-between border-b border-[#CBD5E1]">
-          <span className="flex items-center gap-1.5">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#B3C03E]" />
-            {errorNotice}
+        <div className="bg-[#F3F6D9] text-[#15432C] px-4 py-2 text-xs font-semibold flex items-center justify-between border-b border-[#B3C03E]/40 shadow-inner">
+          <span className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-[#206542] shrink-0" />
+            <span>{errorNotice}</span>
           </span>
-          <span className="text-[11px] text-[#475569]">Auto-retrying in {formatTimeRemaining(nextRefreshSeconds)}</span>
+          <span className="text-[11px] font-mono bg-[#206542]/10 px-2 py-0.5 rounded text-[#15432C]">
+            Auto-retry: {formatTimeRemaining(nextRefreshSeconds)}
+          </span>
         </div>
       )}
 
-      {/* Top Notification if new records arrived */}
+      {/* Top Notification: New Records */}
       {newRecordsNotice && (
-        <div className="bg-[#B3C03E] text-black px-4 py-1 text-xs font-extrabold flex items-center justify-center gap-1.5 border-b border-[#15432C] transition-all animate-in fade-in">
-          <Check className="w-3.5 h-3.5 stroke-[3]" />
-          <span>{newRecordsNotice}</span>
+        <div className="bg-[#B3C03E] text-[#15432C] px-4 py-1.5 text-xs font-black flex items-center justify-center gap-2 border-b border-[#15432C] shadow-sm animate-in fade-in slide-in-from-top-1">
+          <Check className="w-4 h-4 stroke-3" />
+          <span className="tracking-wide uppercase">{newRecordsNotice}</span>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3.5 sm:py-4">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-          {/* Left: Logo and Titles */}
-          <div className="flex items-center gap-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          {/* Left: Branding & Titles */}
+          <div className="flex items-center gap-3.5">
             <div className="shrink-0">
               <Logo className="w-10 h-10 sm:w-12 sm:h-12 drop-shadow-sm" />
             </div>
-            <div>
+
+            <div className="flex flex-col justify-center">
               <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[#B3C03E]">
-                  EXTENSION AFRICA
+                <span className="text-[11px] sm:text-xs font-black uppercase tracking-widest text-white">
+                  Extension Africa
                 </span>
               </div>
-              <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight text-white leading-tight">
+
+              <h1 className="text-lg sm:text-2xl font-black tracking-tight text-white leading-tight">
                 MARKET PRICE INTELLIGENCE
               </h1>
-              <p className="text-xs sm:text-sm text-[#E8F0EC]/90 hidden sm:block">
+
+              <p className="text-xs sm:text-sm text-[#E8F0EC]/85 font-normal leading-snug">
                 Field price surveys from rural and urban markets across Nigeria
               </p>
             </div>
           </div>
 
-          {/* Right: Refresh Controls & Tour Guide */}
-          <div className="flex items-center justify-between md:justify-end gap-3 pt-2 md:pt-0 border-t md:border-t-0 border-[#2b7a52]">
-            {/* Status indicators */}
-            <div className="text-left md:text-right text-xs">
-              <div className="text-[#E8F0EC] font-medium flex items-center md:justify-end gap-1.5">
-                <span>Last updated:</span>
-                <span className="font-semibold text-white">
-                  {formattedDate ? `${formattedDate}, ` : ''}{formattedTime || 'Just now'}
+          {/* Right: Live Status Pill & Action Controls */}
+          <div className="flex flex-wrap items-center justify-between lg:justify-end gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-[#2b7a52]/60">
+            {/* Status Panel Badge */}
+            <div className="flex items-center gap-3 bg-[#15432C]/80 px-3 py-1.5 rounded-lg border border-[#2b7a52] shadow-inner text-xs">
+              <div className="flex flex-col">
+                <span className="text-[10px] text-[#E8F0EC]/70 uppercase tracking-wider font-semibold">
+                  Last Updated
+                </span>
+                <span className="font-bold text-white text-[11px] sm:text-xs">
+                  {formattedDate ? `${formattedDate}, ` : ""}
+                  {formattedTime || "Just now"}
                 </span>
               </div>
-              <div className="text-[#B3C03E] text-[11px] flex items-center md:justify-end gap-1">
-                <span>Next refresh in</span>
-                <span className="font-mono font-bold bg-[#15432C] px-1.5 py-0.2 rounded text-white">
+
+              <div className="h-6 w-px bg-[#2b7a52]" />
+
+              <div className="flex flex-col">
+                <span className="text-[10px] text-[#B3C03E] uppercase tracking-wider font-semibold flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-[#B3C03E]" />
+                  Auto Refresh
+                </span>
+                <span className="font-mono font-extrabold text-[#B3C03E] text-[11px] sm:text-xs">
                   {formatTimeRemaining(nextRefreshSeconds)}
                 </span>
               </div>
@@ -110,10 +130,9 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={onOpenTour}
-                className="p-2 sm:px-2.5 sm:py-2 text-xs font-semibold rounded bg-[#1a5135] hover:bg-[#15432C] text-white flex items-center gap-1 transition-colors border border-[#2b7a52]"
+                className="px-3 py-2 text-xs font-semibold rounded-lg bg-[#15432C] hover:bg-[#1a5135] text-white flex items-center gap-1.5 transition-all border border-[#2b7a52] hover:border-[#B3C03E]/50 shadow-sm active:scale-95 cursor-pointer"
                 title="Open 3-step Dashboard Guide"
-                aria-label="How to use this dashboard"
-              >
+                aria-label="How to use this dashboard">
                 <HelpCircle className="w-4 h-4 text-[#B3C03E]" />
                 <span className="hidden sm:inline">Guide</span>
               </button>
@@ -122,21 +141,22 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="px-3.5 py-2 text-xs sm:text-sm font-bold rounded-md bg-[#B3C03E] text-black hover:bg-[#9fad32] disabled:opacity-75 transition-all flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer min-h-[40px]"
-                aria-label="Refresh price data"
-              >
+                className="px-4 py-2 text-xs sm:text-sm font-bold rounded-lg bg-[#B3C03E] text-[#15432C] hover:bg-[#9fad32] disabled:opacity-75 transition-all flex items-center gap-2 shadow-sm active:scale-95 cursor-pointer min-h-9.5 border border-[#B3C03E]"
+                aria-label="Refresh price data">
                 <RefreshCw
-                  className={`w-4 h-4 text-black ${isRefreshing ? 'animate-spin' : ''}`}
+                  className={`w-4 h-4 text-[#15432C] ${
+                    isRefreshing ? "animate-spin" : ""
+                  }`}
                 />
                 <span>
                   {isRefreshing
-                    ? 'Fetching...'
+                    ? "Fetching..."
                     : recentlyUpdated
-                    ? 'Updated just now'
-                    : 'Refresh'}
+                      ? "Updated"
+                      : "Refresh"}
                 </span>
                 {recentlyUpdated && !isRefreshing && (
-                  <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
+                  <Check className="w-4 h-4 text-[#15432C] stroke-3" />
                 )}
               </button>
             </div>

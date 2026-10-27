@@ -100,7 +100,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <div className="bg-white border-b border-[#CBD5E1] shadow-sm sticky top-[68px] sm:top-[76px] z-30 transition-all">
+    <div className="bg-white border-b border-[#CBD5E1] shadow-sm sticky top-[100px] sm:top-[110px] z-30 transition-all">
       {/* Mobile Bar Header */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5">
         <div className="flex items-center justify-between gap-2 lg:hidden">
