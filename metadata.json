@@ -1,0 +1,6 @@
+{
+  "name": "Market Price Intelligence",
+  "description": "Agricultural commodity and farm-input prices collected across Nigerian markets by Extension Africa field officers with KoboCollect.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
